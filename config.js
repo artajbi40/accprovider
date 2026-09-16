@@ -58,9 +58,9 @@ const TELEGRAM_CONFIG = {
 
 /* ---------------------- USDT Wallet Addresses ---------------------------- */
 const WALLETS = {
-  TRC20: 'TXb8uT3hK99jZpWn4QG7L1A2oXy5q8Vb9Z',
-  BEP20: '0x71C885061730B2fBf3c5f59Ce7A451D5bA4F5b59',
-  ERC20: '0x71C885061730B2fBf3c5f59Ce7A451D5bA4F5b59'
+  TRC20: 'TUZxPcHP1bfpX9oMtchxazCsvqDHoPtGav',
+  BEP20: '0xde8d4c69a8696a1edb1a3d7428f7dd6785f81971',
+  ERC20: '0xde8d4c69a8696a1edb1a3d7428f7dd6785f81971'
 };
 
 /* ------------------------- Payment Networks ------------------------------ */
