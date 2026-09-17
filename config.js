@@ -155,7 +155,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 13, t10: 22, t50: 35, t100: 40, t200: 45, t300: 50, t500: 60 }
+    prices: { t0: 12, t10: 22, t50: 35, t100: 40, t200: 45, t300: 50, t500: 60 }
   },
   {
     id: 5,
@@ -169,7 +169,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 12, t10: 20, t50: 30, t100: 35, t200: 40, t300: 45, t500: 55 }
+    prices: { t0: 10, t10: 20, t50: 30, t100: 35, t200: 40, t300: 45, t500: 55 }
   },
   {
     id: 6,
@@ -183,6 +183,6 @@ const PRODUCTS = [
     accessAvailable: false,
     accessLabel: 'Email Access Not Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 10, t10: 15, t50: 25, t100: 30, t200: 35, t300: 40, t500: 50 }
+    prices: { t0: 8, t10: 15, t50: 25, t100: 30, t200: 35, t300: 40, t500: 50 }
   }
 ];
