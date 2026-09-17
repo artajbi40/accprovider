@@ -113,7 +113,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 12, t10: 20, t50: 30, t100: 35, t200: 40, t300: 50, t500: 60 }
+    prices: { t0: 15, t10: 25, t50: 40, t100: 50, t200: 55, t300: 60, t500: 70 }
   },
   {
     id: 2,
@@ -127,7 +127,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 10, t10: 18, t50: 25, t100: 30, t200: 35, t300: 40, t500: 50 }
+    prices: { t0: 13, t10: 22, t50: 35, t100: 45, t200: 50, t300: 55, t500: 60 }
   },
   {
     id: 3,
@@ -141,12 +141,12 @@ const PRODUCTS = [
     accessAvailable: false,
     accessLabel: 'Email Access Not Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 8, t10: 15, t50: 20, t100: 25, t200: 30, t300: 35, t500: 45 }
+    prices: { t0: 10, t10: 20, t50: 30, t100: 40, t200: 43, t300: 45, t500: 55 }
   },
   {
     id: 4,
     title: 'Random Country - Single Email',
-    badge: '#4 Global Single',
+    badge: '#4 Global Premium',
     location: 'Random Country',
     type: 'Single Email Connected',
     accent: 'teal',
@@ -155,7 +155,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 10, t10: 18, t50: 25, t100: 30, t200: 35, t300: 40, t500: 50 }
+    prices: { t0: 13, t10: 22, t50: 35, t100: 40, t200: 45, t300: 50, t500: 60 }
   },
   {
     id: 5,
@@ -169,7 +169,7 @@ const PRODUCTS = [
     accessAvailable: true,
     accessLabel: 'Full Email Access Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 9, t10: 16, t50: 22, t100: 27, t200: 30, t300: 35, t500: 45 }
+    prices: { t0: 12, t10: 20, t50: 30, t100: 35, t200: 40, t300: 45, t500: 55 }
   },
   {
     id: 6,
@@ -183,6 +183,6 @@ const PRODUCTS = [
     accessAvailable: false,
     accessLabel: 'Email Access Not Available',
     age: '1–10+ Years Aged',
-    prices: { t0: 7, t10: 14, t50: 20, t100: 23, t200: 25, t300: 30, t500: 40 }
+    prices: { t0: 10, t10: 15, t50: 25, t100: 30, t200: 35, t300: 40, t500: 50 }
   }
 ];
