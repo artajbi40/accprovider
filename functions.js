@@ -75,10 +75,13 @@ function closeMobileMenu() { document.getElementById('mobile-menu').classList.ad
    ============================================================ */
 const accountSelection = {}; // product id -> selected tier index
 
-function tierRowHtml(product, i) {
+function tierRowHtml(product, i, available) {
   const active = accountSelection[product.id] === i;
-  return '<button type="button" data-product="' + product.id + '" data-tier="' + i + '" class="tier-row w-full flex items-center justify-between px-3 py-1.5 rounded-lg border text-left transition ' +
-    (active ? 'border-cyan-500/50 bg-cyan-950/40 text-white' : 'border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-600') + '">' +
+  const disabled = available === false;
+  return '<button type="button" data-product="' + product.id + '" data-tier="' + i + '" ' +
+    (disabled ? 'disabled ' : '') + 'class="tier-row w-full flex items-center justify-between px-3 py-1.5 rounded-lg border text-left transition ' +
+    (disabled ? 'cursor-not-allowed opacity-50 ' : '') +
+    (active ? 'border-cyan-500/50 bg-cyan-950/40 text-white' : 'border-slate-800 bg-slate-900/40 ' + (disabled ? 'text-slate-500' : 'text-slate-300 hover:border-slate-600')) + '">' +
     '<span class="flex items-center gap-2 text-[11px] font-semibold">' +
     '<span class="w-2 h-2 rounded-full ' + (active ? 'bg-cyan-400' : 'bg-slate-600') + '"></span>' +
     ACCOUNT_TIERS[i] + ' connections</span>' +
@@ -94,12 +97,19 @@ function renderAccountsGrid() {
     const sel = accountSelection[p.id];
     const price = p.prices[sel];
     const tierLabel = ACCOUNT_TIERS[sel] + ' connections';
+    const soldOut = p.available === false;
+    const stockBadge = soldOut
+      ? '<span class="text-[11px] text-rose-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Sold Out</span>'
+      : '<span class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>';
+    const buyBtn = soldOut
+      ? '<button type="button" disabled class="w-full py-3 rounded-xl bg-slate-800/70 text-slate-500 cursor-not-allowed font-bold text-xs tracking-wide transition flex items-center justify-center gap-2"><i class="fa-solid fa-ban"></i><span>Sold Out — Not Available</span></button>'
+      : '<button type="button" onclick="buyAccount(\'' + p.id + '\')" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs tracking-wide transition flex items-center justify-center gap-2"><i class="fa-solid fa-cart-shopping"></i><span>Buy Now — $' + price + '</span></button>';
     return '' +
-      '<article class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between hover:border-cyan-500/50 transition-all duration-300 hover:shadow-glow">' +
+      '<article class="bg-slate-900/70 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between ' + (soldOut ? 'opacity-80 ' : 'hover:border-cyan-500/50 transition-all duration-300 hover:shadow-glow') + '">' +
         '<div>' +
           '<div class="flex items-center justify-between mb-4">' +
             '<span class="px-3 py-1 rounded-full text-[11px] font-bold border ' + p.badge + ' ' + p.accent + '">' + p.tag + '</span>' +
-            '<span class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>' +
+            stockBadge +
           '</div>' +
           '<h3 class="text-lg font-extrabold text-white leading-snug mb-1">' + p.name + '</h3>' +
           '<p class="text-xs text-slate-400 leading-relaxed mb-4">' + p.desc + '</p>' +
@@ -108,16 +118,14 @@ function renderAccountsGrid() {
             '<span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">Full Ownership</span>' +
           '</div>' +
           '<div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Pricing Matrix — By Connections</div>' +
-          '<div class="space-y-1.5">' + p.prices.map(function (_, i) { return tierRowHtml(p, i); }).join('') + '</div>' +
+          '<div class="space-y-1.5">' + p.prices.map(function (_, i) { return tierRowHtml(p, i, p.available); }).join('') + '</div>' +
         '</div>' +
         '<div class="mt-5 pt-5 border-t border-slate-800/70">' +
           '<div class="flex items-center justify-between mb-3">' +
             '<span class="text-[11px] text-slate-400">Selected: <strong id="sel-' + p.id + '" class="text-white">' + tierLabel + '</strong></span>' +
             '<span class="text-lg font-black text-cyan-400" id="price-' + p.id + '">$' + price + '</span>' +
           '</div>' +
-          '<button type="button" onclick="buyAccount(\'' + p.id + '\')" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-xs tracking-wide transition flex items-center justify-center gap-2">' +
-            '<i class="fa-solid fa-cart-shopping"></i><span>Buy Now — $' + price + '</span>' +
-          '</button>' +
+          buyBtn +
         '</div>' +
       '</article>';
   }).join('');
@@ -133,6 +141,7 @@ function renderAccountsGrid() {
 
 function buyAccount(id) {
   const p = ACCOUNT_PRODUCTS.find(function (x) { return x.id === id; });
+  if (!p || p.available === false) return;
   const tier = accountSelection[id];
   startCheckout({
     type: 'accounts',
@@ -140,8 +149,7 @@ function buyAccount(id) {
     tier: ACCOUNT_TIERS[tier] + ' connections',
     base: p.prices[tier],
     unitPrice: p.prices[tier],
-    qty: 1,
-    addon: { label: 'Add Custom URL Check', price: 10 }
+    qty: 1
   });
 }
 
@@ -257,8 +265,7 @@ function cfgKeyFor(k) {
    ============================================================ */
 const checkout = {
   cart: null,        // product cart snapshot
-  network: 'TRC20',  // selected crypto network
-  addonChecked: false
+  network: 'TRC20'  // selected crypto network
 };
 
 function startCheckout(opts) {
@@ -270,11 +277,9 @@ function startCheckout(opts) {
     unitPrice: opts.unitPrice || opts.base,
     pricing: opts.pricing || null,
     qty: opts.qty || 1,
-    addon: opts.addon || (opts.type === 'navigator' ? NAV_ADDONS[opts.serviceType || 'fresh'] : null),
     serviceType: opts.serviceType || null
   };
   checkout.network = 'TRC20';
-  checkout.addonChecked = false;
   renderCheckout();
   openCheckoutModal();
 }
@@ -317,17 +322,6 @@ function renderCheckout() {
   extraWrap.innerHTML = '<label class="block text-xs font-semibold text-slate-300 mb-1" for="modal-extra">' + ef.label + ' <span class="text-rose-400">' + (required ? '*' : '(optional)') + '</span></label>' +
     '<input class="w-full bg-[#060a14] border border-brand-border text-white text-xs rounded-xl px-3 py-2.5 focus:border-cyan-400 focus:ring-0" id="modal-extra" placeholder="' + ef.placeholder + '" type="text">';
 
-  /* Add-on row */
-  const addonWrap = document.getElementById('modal-addon-wrap');
-  if (c.addon) {
-    addonWrap.classList.remove('hidden');
-    document.getElementById('modal-addon-label').textContent = c.addon.label;
-    document.getElementById('modal-addon-price').textContent = '+$' + c.addon.price;
-    document.getElementById('modal-addon-check').checked = checkout.addonChecked;
-  } else {
-    addonWrap.classList.add('hidden');
-  }
-
   document.getElementById('order-telegram').value = '';
   document.getElementById('order-email').value = '';
   document.getElementById('order-txid').value = '';
@@ -343,8 +337,7 @@ function renderCheckoutPrices() {
   const pct = cfg ? getDiscount(cfg.tiers, q) : 0;
   const unit = cfg ? unitPrice(cfg, q) : c.base;
   const subtotal = +(unit * q).toFixed(2);
-  const addonTotal = (checkout.addonChecked && c.addon) ? c.addon.price : 0;
-  const total = +(subtotal + addonTotal).toFixed(2);
+  const total = subtotal;
   const savings = cfg ? +(cfg.base * q - subtotal).toFixed(2) : 0;
 
   document.getElementById('modal-unit-price').textContent = money(unit);
@@ -353,11 +346,6 @@ function renderCheckoutPrices() {
   document.getElementById('modal-discount-tag').textContent = pct > 0 ? pct + '% BULK OFF' : '0% OFF';
   document.getElementById('modal-savings').textContent = 'Savings: ' + money(savings);
   document.getElementById('modal-savings').style.color = pct > 0 ? '' : '#94a3b8';
-}
-
-function updateModal() {
-  checkout.addonChecked = document.getElementById('modal-addon-check').checked;
-  renderCheckoutPrices();
 }
 
 /* ---- Crypto network selector ---- */
@@ -405,8 +393,7 @@ async function submitOrder(e) {
   const pct = cfg ? getDiscount(cfg.tiers, c.qty) : 0;
   const unit = cfg ? unitPrice(cfg, c.qty) : c.base;
   const subtotal = +(unit * c.qty).toFixed(2);
-  const addonTotal = (checkout.addonChecked && c.addon) ? c.addon.price : 0;
-  const total = +(subtotal + addonTotal).toFixed(2);
+  const total = subtotal;
 
   const extraRequired = EXTRA_FIELDS[c.type].required && !(c.type === 'navigator' && c.serviceType === 'bundle');
   if (!telegram || !email || !txid || (extraRequired && !extra)) {
@@ -415,7 +402,6 @@ async function submitOrder(e) {
   }
 
   const orderId = '#AP-' + Math.floor(1000 + Math.random() * 9000);
-  const addonNote = c.addon ? (checkout.addonChecked ? c.addon.label + ' (+$' + c.addon.price + ')' : 'None / Standard') : 'None';
 
   const messageText =
     '🛒 *ACCPROVIDER — NEW ORDER*\n' +
@@ -426,7 +412,6 @@ async function submitOrder(e) {
     '🔢 *Quantity:* ' + c.qty + '\n' +
     '💰 *Unit Price:* $' + unit.toFixed(2) + ' USDT\n' +
     (pct > 0 ? '🏷️ *Discount:* ' + pct + '% OFF (saved $' + (cfg.base * c.qty - subtotal).toFixed(2) + ')\n' : '') +
-    (addonTotal > 0 ? '➕ *Add-on:* ' + addonNote + '\n' : '') +
     '💵 *Total:* $' + total.toFixed(2) + ' USDT\n' +
     '🌐 *Network:* ' + checkout.network + '\n' +
     (extra ? '📌 *Target / Notes:* ' + extra + '\n' : '') +

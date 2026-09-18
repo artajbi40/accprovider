@@ -64,13 +64,16 @@ const ACCOUNT_TIERS = ['0–9', '10–49', '50–99', '100–299', '300–499', 
    ACCOUNT_TIERS indexes above. Customize names, tags, colours and
    prices freely — the grid + checkout adapt automatically.
    ----------------------------------------------------------------- */
+/* `available` controls whole-table stock status. Set to false to show
+   the table as SOLD OUT (tiers dimmed, buy button disabled). Defaults
+   to available when omitted. */
 const ACCOUNT_PRODUCTS = [
-  { id: 'us-single', tag: '#1 US Premium',          name: 'US Location — Single Email',               desc: 'US Location. Email access available and only one email connected with the account',            accent: 'text-cyan-400',      badge: 'bg-cyan-950/70 border-cyan-500/30',                 prices: [15, 25, 35, 45, 52, 65] },
-  { id: 'us-multi',  tag: '#2 US Multi Email',      name: 'US Location — Multiple Email',             desc: 'US Location. Email access available but multipe email may be connected with the account',      accent: 'text-blue-400',      badge: 'bg-blue-950/70 border-blue-500/30',                 prices: [13, 22, 30, 40, 48, 60] },
-  { id: 'us-2fa',    tag: '#3 US 2FA/SMS',          name: 'US Location — 2FA/SMS',                    desc: 'US Location. Email access not available and login via 2FA/SMS code',                           accent: 'text-emerald-400',   badge: 'bg-emerald-950/70 border-emerald-500/30',           prices: [10, 18, 25, 35, 42, 50] },
-  { id: 'rc-single', tag: '#4 Random Premium',      name: 'Random Country — Single Email',            desc: 'Random country Location. Email access available and only one email connected with the account',         accent: 'text-sky-400',       badge: 'bg-sky-950/70 border-sky-500/30',          prices: [12, 20, 28, 38, 50, 55] },
-  { id: 'rc-multi',  tag: '#5 Random Multi Email',  name: 'Random Country — Multiple Email',          desc: 'Random country Location. Email access available but multipe email may be connected with the account',   accent: 'text-indigo-400',    badge: 'bg-indigo-950/70 border-indigo-500/30',    prices: [10, 18, 25, 35, 42, 50] },
-  { id: 'rc-2fa',    tag: '#6 Random 2FA/SMS',      name: 'Random Country — 2FA/SMS',                 desc: 'Random country Location. Email access not available and login via 2FA/SMS code',                        accent: 'text-violet-400',    badge: 'bg-violet-950/70 border-violet-500/30',    prices: [8, 15, 20, 30, 35, 40] }
+  { id: 'us-single', available: false, tag: '#1 US Premium',          name: 'US Location — Single Email',               desc: 'US Location. Email access available and only one email connected with the account',            accent: 'text-cyan-400',      badge: 'bg-cyan-950/70 border-cyan-500/30',                 prices: [18, 28, 40, 50, 55, 70] },
+  { id: 'us-multi',  available: true, tag: '#2 US Multi Email',      name: 'US Location — Multiple Email',             desc: 'US Location. Email access available but multipe email may be connected with the account',      accent: 'text-blue-400',      badge: 'bg-blue-950/70 border-blue-500/30',                 prices: [15, 25, 35, 45, 52, 65] },
+  { id: 'us-2fa',    available: true, tag: '#3 US 2FA/SMS',          name: 'US Location — 2FA/SMS',                    desc: 'US Location. Email access not available and login via 2FA/SMS code',                           accent: 'text-emerald-400',   badge: 'bg-emerald-950/70 border-emerald-500/30',           prices: [12, 20, 28, 38, 45, 60] },
+  { id: 'rc-single', available: true, tag: '#4 Random Premium',      name: 'Random Country — Single Email',            desc: 'Random country Location. Email access available and only one email connected with the account',         accent: 'text-sky-400',       badge: 'bg-sky-950/70 border-sky-500/30',          prices: [12, 20, 28, 38, 45, 60] },
+  { id: 'rc-multi',  available: true, tag: '#5 Random Multi Email',  name: 'Random Country — Multiple Email',          desc: 'Random country Location. Email access available but multipe email may be connected with the account',   accent: 'text-indigo-400',    badge: 'bg-indigo-950/70 border-indigo-500/30',    prices: [10, 18, 25, 35, 42, 50] },
+  { id: 'rc-2fa',    available: true, tag: '#6 Random 2FA/SMS',      name: 'Random Country — 2FA/SMS',                 desc: 'Random country Location. Email access not available and login via 2FA/SMS code',                        accent: 'text-violet-400',    badge: 'bg-violet-950/70 border-violet-500/30',    prices: [8, 15, 20, 30, 35, 40] }
 ];
 
 
@@ -79,7 +82,7 @@ const ACCOUNT_PRODUCTS = [
    `required: true` enforces a value (except Navigator bundles).
    ----------------------------------------------------------------- */
 const EXTRA_FIELDS = {
-accounts:  { label: 'Profile Notes',                                       placeholder: 'e.g. any delivery preferences or notes',                       required: false },
+accounts:  { label: 'Profile Notes',                                        placeholder: 'e.g. any delivery preferences or notes',                       required: false },
   navigator: { label: 'LinkedIn Profile URL',                               placeholder: 'https://www.linkedin.com/in/your-profile',                    required: true },
   growth:    { label: 'Target LinkedIn Profile URL',                        placeholder: 'https://www.linkedin.com/in/your-profile',                    required: true },
   badge:     { label: 'Target LinkedIn Profile URL(s)',                     placeholder: 'https://www.linkedin.com/in/username',                        required: true },
@@ -96,4 +99,4 @@ const NAV_ADDONS = {
   fresh:   { label: 'Priority 5-Minute Instant Express Delivery',   price: 5 },
   renewal: { label: 'Priority 5-Minute Instant Express Delivery',   price: 5 },
   bundle:  { label: 'Pre-select Profile URL / Industry & Country',  price: 10 }
-};
+}; 
