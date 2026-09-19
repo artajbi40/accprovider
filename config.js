@@ -77,6 +77,29 @@ const ACCOUNT_PRODUCTS = [
 ];
 
 
+/* ---- High Quality Low Cost Account (Section 1 bonus price table) --
+   Single-connection (0-9) budget accounts priced by age & location.
+   Each item: { label, price } rendered as one row in the price table.
+   ----------------------------------------------------------------- */
+const HQ_ACCOUNT = {
+  tag: 'High Quality Low Cost',
+  name: 'High Quality Low Cost Account',
+  desc: 'High quality LinkedIn account at low cost. Connection 0-9.',
+  connection: '0-9',
+  note: 'Discount available on Bulk order',
+  options: [
+    { label: '1 Month US ',              price: 6 },
+    { label: '3 Month US ',              price: 8 },
+    { label: '6 Month US ',              price: 10 },
+    { label: '1-10+ Years US ',          price: 12 },
+    { label: '1 Month Random ',          price: 4 },
+    { label: '3 Month Random ',          price: 6 },
+    { label: '6 Month Random ',          price: 8 },
+    { label: '1-10+ Years Random ',      price: 10 }
+  ]
+};
+
+
 /* ---- Extra (target) field configuration per checkout type --------
    Shown as the single free-text field inside the checkout modal.
    `required: true` enforces a value (except Navigator bundles).

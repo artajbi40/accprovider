@@ -154,6 +154,82 @@ function buyAccount(id) {
 }
 
 
+/* ---- High Quality Low Cost Account price table (config.js) ---- */
+function renderHqAccountGrid() {
+  const wrap = document.getElementById('hq-account-grid');
+  if (!wrap) return;
+  const opts = HQ_ACCOUNT.options;
+  const mid = Math.ceil(opts.length / 2);
+
+  const hqTableHtml = function (title, options) {
+    const rows = options.map(function (o) {
+      return '<tr class="border-b border-slate-800/60 last:border-0">' +
+        '<td class="py-3.5 px-4 sm:px-5"><span class="text-xs sm:text-sm font-bold text-white">' + o.label + '</span></td>' +
+        '<td class="py-3.5 px-4 sm:px-5"><div class="inline-flex items-baseline gap-1"><span class="text-lg sm:text-xl font-black text-cyan-400">$' + o.price + '</span><span class="text-[10px] font-semibold text-slate-400 uppercase">USDT</span></div></td>' +
+        '<td class="py-3.5 px-4 sm:px-5 text-right">' +
+          '<button type="button" onclick="buyHqAccount(' + o.price + ', ' + "'" + o.label + "'" + ')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-[11px] tracking-wide transition flex items-center justify-center gap-1.5 ml-auto"><i class="fa-solid fa-cart-shopping"></i><span>Buy Now</span></button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
+    return '<div class="rounded-2xl bg-slate-900/80 border border-slate-800 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:shadow-glow">' +
+      '<div class="px-4 sm:px-5 py-3 border-b border-slate-800 bg-slate-900/60">' +
+        '<div class="flex items-center justify-between gap-2">' +
+          '<span class="text-[11px] font-bold uppercase tracking-wider text-cyan-300"><i class="fa-solid fa-location-dot mr-1"></i>' + title + '</span>' +
+          '<span class="text-[10px] font-semibold text-slate-500">' + options.length + ' Variations</span>' +
+        '</div>' +
+      '</div>' +
+      '<table class="w-full text-left border-collapse">' +
+        '<thead><tr class="border-b border-slate-800 bg-slate-900/40 text-slate-400 text-[11px] uppercase tracking-wider">' +
+          '<th class="py-2.5 px-4 sm:px-5">Plan Label</th>' +
+          '<th class="py-2.5 px-4 sm:px-5">USDT Price</th>' +
+          '<th class="py-2.5 px-4 sm:px-5 text-right">Action</th>' +
+        '</tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table>' +
+    '</div>';
+  };
+
+  wrap.innerHTML =
+    '<div class="rounded-3xl bg-slate-900/70 border border-slate-800 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 hover:shadow-glow">' +
+      '<div class="p-6 sm:p-7 border-b border-slate-800 bg-gradient-to-br from-[#0b1220]/80 to-transparent">' +
+        '<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">' +
+          '<div>' +
+            '<div class="flex items-center gap-2 mb-2 flex-wrap">' +
+              '<span class="px-3 py-1 rounded-full text-[11px] font-bold border bg-cyan-950/70 border-cyan-500/30 text-cyan-400">' + HQ_ACCOUNT.tag + '</span>' +
+              '<span class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>' +
+            '</div>' +
+            '<h3 class="text-xl sm:text-2xl font-extrabold text-white">' + HQ_ACCOUNT.name + '</h3>' +
+            '<p class="text-xs sm:text-sm text-slate-400 mt-1.5">' + HQ_ACCOUNT.desc + '</p>' +
+          '</div>' +
+          '<div class="flex flex-wrap gap-1.5 shrink-0">' +
+            '<span class="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">' + HQ_ACCOUNT.connection + ' Connections</span>' +
+            '<span class="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400"><i class="fa-solid fa-percent mr-1"></i>Bulk Order Discount</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="bg-amber-950/30 border border-amber-500/30 rounded-xl p-3 mt-4 flex items-start gap-2.5">' +
+          '<i class="fa-solid fa-tags text-amber-400 text-xs mt-0.5 shrink-0"></i>' +
+          '<p class="text-xs sm:text-sm text-amber-200 font-semibold">' + HQ_ACCOUNT.note + ' — message support on Telegram @' + CONFIG.CONTACT.telegram.replace('@', '') + ' for larger quantities.</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 p-4 sm:p-6">' +
+        hqTableHtml('US Location', opts.slice(0, mid)) +
+        hqTableHtml('Random Country Location', opts.slice(mid)) +
+      '</div>' +
+    '</div>';
+}
+
+function buyHqAccount(price, label) {
+  startCheckout({
+    type: 'accounts',
+    name: HQ_ACCOUNT.name,
+    tier: label + ' • ' + HQ_ACCOUNT.connection + ' connections',
+    base: price,
+    unitPrice: price,
+    qty: 1
+  });
+}
+
+
 /* ============================================================
    INTERACTIVE CALCULATORS — GROWTH / BADGE / CUSTOM
    ============================================================ */
@@ -531,6 +607,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('year').textContent = new Date().getFullYear();
   document.getElementById('global-contact-channels').innerHTML = contactChannelHtml();
   renderAccountsGrid();
+  renderHqAccountGrid();
   updateGrowthCalc();
   setGrowthPlan(calcState.growth.plan);
   updateBadgeCalc();
